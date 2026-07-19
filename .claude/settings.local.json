@@ -29,7 +29,9 @@
       "Bash(cat \"$HOME/.ssh/id_ed25519.pub\")",
       "Bash(ssh -T git@gitee.com)",
       "Bash(ping -n 1 gitee.com)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(npm run *)",
+      "Bash(git commit *)"
     ]
   }
 }
