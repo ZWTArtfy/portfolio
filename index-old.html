@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✨ 我的作品集</title>
+<style>
+/* ===== 字体导入 ===== */
+@import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;700&display=swap');
+
+/* ===== CSS 变量：轻松治愈配色 ===== */
+:root {
+  --bg: #faf8f5;
+  --paper: #fffef9;
+  --paper2: #fdf6f0;
+  --paper3: #f5faf7;
+  --text: #5c4b3c;
+  --text-light: #8b7b6b;
+  --text-lighter: #b0a595;
+  --ink: #3d3226;
+
+  /* 治愈色盘 */
+  --peach: #f5c6aa;
+  --peach-light: #fde8da;
+  --coral: #f0a5a5;
+  --coral-light: #fde0e0;
+  --mint: #a8d8c8;
+  --mint-light: #d8f0e8;
+  --sky: #a8c8e8;
+  --sky-light: #d8e8f8;
+  --lavender: #c8b8e0;
+  --lavender-light: #e8e0f5;
+  --yellow: #f5e0a0;
+  --yellow-light: #fdf5d8;
+  --rose: #e8b8c0;
+  --rose-light: #f8e4e8;
+
+  /* 手绘线条 */
+  --doodle-color: #8b7355;
+  --doodle-thin: #c4b8a8;
+
+  --font-doodle: 'ZCOOL KuaiLe', 'Ma Shan Zheng', cursive;
+  --font-body: 'Noto Sans SC', sans-serif;
+  --radius-organic: 24px 12px 24px 12px;
+  --radius-doodle: 12px 24px 8px 20px;
+}
+
+/* ===== Reset ===== */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(circle at 10% 20%, var(--peach-light) 0%, transparent 40%),
+    radial-gradient(circle at 85% 15%, var(--sky-light) 0%, transparent 35%),
+    radial-gradient(circle at 20% 70%, var(--mint-light) 0%, transparent 40%),
+    radial-gradient(circle at 75% 80%, var(--lavender-light) 0%, transparent 35%),
+    radial-gradient(circle at 50% 50%, var(--yellow-light) 0%, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* ===== 纸纹背景 ===== */
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(139,115,85,0.015) 2px, rgba(139,115,85,0.015) 4px);
+  opacity: 0.5;
+}
+
+/* ===== 手绘行星与花瓣画布 ===== */
+#doodle-canvas {
+  display: none;
+}
+
+/* ===== 纯CSS手绘行星与花瓣 ===== */
+.doodle-layer {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 0; overflow: hidden;
+}
+
+/* ---- 行星 ---- */
+.doodle-planet {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.65;
+  animation: planetDrift var(--drift-dur, 30s) linear infinite;
+}
+.doodle-planet::before {
+  content: '';
+  position: absolute; inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--ring-color, transparent);
+  opacity: 0.5;
+  transform: scaleX(2.8) scaleY(0.8);
+  border-style: dashed;
+}
+.doodle-planet::after {
+  content: '';
+  position: absolute;
+  width: 18%; height: 18%;
+  background: var(--crater-color, transparent);
+  border-radius: 50%;
+  top: 28%; left: 22%;
+  opacity: 0.55;
+  box-shadow:
+    0 0 0 0 var(--crater-color),
+    calc(var(--r) * 0.5) calc(var(--r) * 0.25) 0 0 var(--crater-color),
+    calc(var(--r) * -0.35) calc(var(--r) * -0.3) 0 0 var(--crater-color);
+}
+
+/* 行星颜色变体 */
+.planet-peach  { background: radial-gradient(circle at 35% 30%, #fde0c8, #f5c6aa 60%, #e0a880); }
+.planet-lav    { background: radial-gradient(circle at 35% 30%, #e8ddf5, #c8b8e0 60%, #a890c0); }
+.planet-mint   { background: radial-gradient(circle at 35% 30%, #d8f0e8, #a8d8c8 60%, #78b898); }
+.planet-sky    { background: radial-gradient(circle at 35% 30%, #dde8f8, #a8c8e8 60%, #78a0c0); }
+.planet-yellow { background: radial-gradient(circle at 35% 30%, #fdf0d0, #f5e0a0 60%, #d0b870); }
+.planet-rose   { background: radial-gradient(circle at 35% 30%, #f8e0e8, #e8b8c0 60%, #c88898); }
+
+@keyframes planetDrift {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  25%  { transform: translate(30px, -20px) rotate(2deg); }
+  50%  { transform: translate(-15px, -35px) rotate(-1deg); }
+  75%  { transform: translate(-25px, 15px) rotate(-2deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* ---- 花瓣 ---- */
+.doodle-petal {
+  position: absolute;
+  opacity: 0.55;
+  animation: petalFloat var(--drift-dur, 20s) linear infinite;
+  font-size: var(--size, 16px);
+  filter: blur(0.3px);
+}
+@keyframes petalFloat {
+  0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
+  20%  { transform: translate(25px, -40px) rotate(60deg) scale(1.05); }
+  40%  { transform: translate(-10px, -70px) rotate(140deg) scale(0.92); }
+  60%  { transform: translate(-30px, -30px) rotate(210deg) scale(1.03); }
+  80%  { transform: translate(15px, -60px) rotate(300deg) scale(0.96); }
+  100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+}
+/* 花瓣额外摆动 */
+@keyframes petalSway {
+  0%, 100% { margin-left: 0; }
+  50% { margin-left: 15px; }
+}
+
+/* ===== 手绘光标 ===== */
+.cursor-dot {
+  position: fixed; width: 12px; height: 12px; pointer-events: none; z-index: 10000;
+  background: var(--coral); border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  transition: transform 0.15s, width 0.2s, height 0.2s;
+  mix-blend-mode: multiply;
+}
+
+/* ===== 主容器 ===== */
+.main-wrap { position: relative; z-index: 1; max-width: 1400px; margin:0 auto; padding: 1rem; }
+
+/* ===== 手绘导航 ===== */
+.nav-doodle {
+  position: sticky; top: 1rem; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.8rem 2rem; margin-bottom: 2rem;
+  background: rgba(255,254,249,0.85); backdrop-filter: blur(12px);
+  border: 2.5px solid var(--doodle-color);
+  border-radius: 30px 8px 30px 8px;
+  box-shadow: 3px 3px 0 rgba(139,115,85,0.1);
+  font-family: var(--font-doodle);
+}
+.nav-doodle .logo {
+  font-size: 1.8rem; color: var(--ink); text-decoration: none;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.nav-doodle .logo .star { color: var(--yellow); font-size: 1.5rem; animation: wiggle 2s infinite; }
+@keyframes wiggle {
+  0%,100%{transform:rotate(0)} 25%{transform:rotate(10deg)} 50%{transform:rotate(-8deg)} 75%{transform:rotate(5deg)}
+}
+.nav-links {
+  display: flex; gap: 1.8rem; list-style: none; flex-wrap: wrap;
+}
+.nav-links a {
+  color: var(--text-light); text-decoration: none; font-size: 1.05rem;
+  position: relative; padding: 0.2rem 0;
+  transition: color 0.3s;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px;
+  background: var(--peach); border-radius: 2px;
+  transform: scaleX(0); transition: transform 0.3s;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-doodle .menu-btn { display: none; background: none; border: none; font-size: 1.8rem; cursor: pointer; font-family: var(--font-doodle); }
+
+/* ===== 英雄区 ===== */
+.hero {
+  text-align: center; padding: 4rem 1rem 3rem;
+  position: relative;
+}
+.hero .doodle-cloud {
+  display: inline-block; position: relative;
+}
+.hero .doodle-cloud::before {
+  content: ''; display: none;
+}
+.hero .doodle-cloud::after {
+  content: ''; display: none;
+}
+@keyframes floatCloud {
+  0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)}
+}
+@keyframes twinkle {
+  0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)}
+}
+.hero h1 {
+  font-family: var(--font-doodle);
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+  color: var(--ink);
+  margin-bottom: 0.8rem;
+  line-height: 1.3;
+}
+.hero h1 .hl { display: inline-block; padding: 0.1rem 0.6rem; border-radius: 8px 20px 8px 20px; }
+.hero h1 .hl-peach { background: var(--peach-light); }
+.hero h1 .hl-mint { background: var(--mint-light); }
+.hero h1 .hl-sky { background: var(--sky-light); }
+.hero h1 .hl-lav { background: var(--lavender-light); }
+.hero .subtitle {
+  font-size: 1.1rem; color: var(--text-light);
+  max-width: 600px; margin: 0 auto 2rem;
+  position: relative; display: inline-block;
+}
+.hero .subtitle::after {
+  content: '~ ✿ ~'; display: block; margin-top: 0.6rem;
+  font-family: var(--font-doodle); font-size: 1.3rem;
+  color: var(--peach);
+}
+.hero .doodle-divider {
+  display: flex; justify-content: center; gap: 1rem;
+  font-size: 1.5rem; margin-top: 1.5rem;
+  animation: fadeInUp 1s 0.6s both;
+}
+@keyframes fadeInUp {
+  from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:translateY(0) }
+}
+
+/* ===== 手绘装饰元素 ===== */
+.doodle-corner { position: absolute; font-size: 2rem; opacity: 0.6; pointer-events: none; }
+.doodle-squiggle {
+  position: relative; display: inline-block;
+}
+.doodle-squiggle::after {
+  content: '';
+  position: absolute; bottom: -4px; left: -5%; width: 110%; height: 6px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6'%3E%3Cpath d='M0 3 Q10 0 20 3 Q30 6 40 3 Q50 0 60 3 Q70 6 80 3 Q90 0 100 3' fill='none' stroke='%23f5c6aa' stroke-width='2'/%3E%3C/svg%3E") repeat-x;
+  background-size: 50px 6px;
+}
+
+/* ===== 手绘分区标题 ===== */
+.section-header {
+  margin: 4rem 0 2rem; text-align: center; position: relative;
+}
+.section-header .section-emoji {
+  font-size: 2.5rem; display: block; margin-bottom: 0.5rem;
+  animation: bounceEmoji 1.5s ease-in-out infinite;
+}
+@keyframes bounceEmoji {
+  0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)}
+}
+.section-header h2 {
+  font-family: var(--font-doodle); font-size: 2.2rem; color: var(--ink);
+  display: inline-block; position: relative;
+}
+.section-header h2::before {
+  content: '✧'; position: absolute; left: -2rem; top: -0.3rem;
+  font-size: 1.2rem; color: var(--yellow);
+}
+.section-header h2::after {
+  content: '✧'; position: absolute; right: -2rem; top: -0.3rem;
+  font-size: 1.2rem; color: var(--yellow);
+}
+.section-header .section-desc {
+  color: var(--text-lighter); font-size: 0.9rem; margin-top: 0.3rem;
+}
+
+/* ===== 横向滑动卡片区 - 已禁用 ===== */
+.scroll-gallery { display: none; }
+.scroll-gallery-inner { display: none; }
+.scroll-gallery-inner .card { display: none; }
+
+/* ===== 自由排版作品网格 (Masonry) ===== */
+.masonry {
+  columns: 3; column-gap: 1.2rem;
+  margin: 0 auto;
+}
+@media (max-width: 1100px) { .masonry { columns: 2; } }
+@media (max-width: 700px)  { .masonry { columns: 1; } }
+
+/* ===== 手绘卡片 ===== */
+.card {
+  break-inside: avoid; margin-bottom: 1.2rem;
+  background: var(--paper);
+  border: 2px solid var(--doodle-thin);
+  border-radius: var(--radius-doodle);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  box-shadow: 2px 3px 0 rgba(180,165,140,0.1);
+  cursor: pointer;
+}
+.card:hover {
+  transform: translateY(-4px) rotate(-0.5deg);
+  box-shadow: 5px 8px 0 rgba(180,165,140,0.15);
+  border-color: var(--peach);
+}
+.card .card-media {
+  width: 100%; position: relative; overflow: hidden;
+  background: var(--paper2);
+  display: flex; align-items: center; justify-content: center;
+}
+.card .card-media img {
+  width: 100%; height: auto; display: block;
+  transition: transform 0.4s;
+}
+.card:hover .card-media img { transform: scale(1.03); }
+.card .card-media video {
+  width: 100%; height: auto; display: block; max-height: 400px; object-fit: contain;
+  background: #000;
+}
+.card .card-body {
+  padding: 1rem 1.2rem;
+  border-top: 1.5px dashed var(--doodle-thin);
+}
+.card .card-body h3 {
+  font-family: var(--font-doodle); font-size: 1.15rem;
+  color: var(--ink); margin-bottom: 0.2rem;
+}
+.card .card-body .card-cat {
+  font-size: 0.75rem; color: var(--text-lighter);
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.card .card-body .card-cat .dot {
+  width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+}
+.card .card-body .card-filename {
+  font-size: 0.7rem; color: var(--text-lighter); margin-top: 0.2rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* 视频标记 */
+.video-badge {
+  position: absolute; top: 8px; left: 8px;
+  background: rgba(0,0,0,0.65); color: #fff;
+  font-size: 0.7rem; padding: 0.25rem 0.6rem; border-radius: 20px;
+  display: flex; align-items: center; gap: 0.3rem;
+  z-index: 2; pointer-events: none;
+}
+/* 图片数量标记 */
+.count-badge {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(255,254,249,0.9); color: var(--text-light);
+  font-size: 0.7rem; padding: 0.2rem 0.55rem; border-radius: 15px;
+  border: 1px solid var(--doodle-thin);
+  z-index: 2; pointer-events: none;
+}
+
+/* ===== 分类色标 ===== */
+.dot-peach { background: var(--peach); }
+.dot-mint { background: var(--mint); }
+.dot-sky { background: var(--sky); }
+.dot-lav { background: var(--lavender); }
+.dot-coral { background: var(--coral); }
+.dot-yellow { background: var(--yellow); }
+.dot-rose { background: var(--rose); }
+
+/* ===== Lightbox 弹窗 ===== */
+.lightbox {
+  display: none; position: fixed; inset: 0; z-index: 999;
+  background: rgba(60,45,30,0.88); backdrop-filter: blur(10px);
+  justify-content: center; align-items: center; padding: 2rem;
+}
+.lightbox.active { display: flex; }
+.lightbox-content {
+  max-width: 90vw; max-height: 85vh; position: relative;
+  background: var(--paper);
+  border: 3px solid var(--doodle-color);
+  border-radius: var(--radius-organic);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes popIn {
+  from { transform:scale(0.8) rotate(-2deg); opacity:0; }
+  to { transform:scale(1) rotate(0); opacity:1; }
+}
+.lightbox-content img {
+  display: block; max-width: 88vw; max-height: 80vh;
+  object-fit: contain;
+}
+.lightbox-content video {
+  display: block; max-width: 88vw; max-height: 80vh;
+  outline: none;
+}
+.lightbox-close {
+  position: fixed; top: 1.5rem; right: 2rem; z-index: 1001;
+  font-size: 2.5rem; color: #fff; cursor: pointer;
+  background: none; border: none; font-family: var(--font-doodle);
+  transition: transform 0.2s;
+}
+.lightbox-close:hover { transform: rotate(90deg) scale(1.2); }
+.lightbox-nav {
+  position: fixed; top: 50%; z-index: 1001; transform: translateY(-50%);
+  font-size: 2.5rem; color: #fff; cursor: pointer;
+  background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.3);
+  width: 50px; height: 70px; border-radius: 25px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.lightbox-nav:hover { background: rgba(255,255,255,0.25); }
+.lightbox-prev { left: 1.5rem; }
+.lightbox-next { right: 1.5rem; }
+.lightbox-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.6));
+  color: #fff; padding: 2rem 1.5rem 1rem;
+  font-family: var(--font-doodle); font-size: 1.1rem;
+}
+
+/* ===== 手绘页脚 ===== */
+.footer {
+  text-align: center; padding: 3rem 1.5rem; margin-top: 3rem;
+  border-top: 2px dashed var(--doodle-thin);
+  position: relative;
+}
+.footer .footer-doodles {
+  display: flex; justify-content: center; gap: 1.5rem; font-size: 2rem;
+  margin-bottom: 1rem;
+}
+.footer p { color: var(--text-lighter); font-size: 0.85rem; }
+.footer .signature { font-family: var(--font-doodle); color: var(--peach); font-size: 1.3rem; }
+
+/* ===== 分类筛选按钮 ===== */
+.filter-bar {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+.filter-btn {
+  font-family: var(--font-doodle); font-size: 0.9rem;
+  padding: 0.45rem 1.2rem;
+  border: 2px solid var(--doodle-thin); border-radius: 20px;
+  background: var(--paper); color: var(--text-light); cursor: pointer;
+  transition: all 0.25s;
+}
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--peach); background: var(--peach-light);
+  color: var(--ink); transform: translateY(-2px);
+}
+.filter-btn .count { font-size: 0.7rem; color: var(--text-lighter); margin-left: 0.2rem; }
+
+/* ===== 响应式 ===== */
+@media (max-width: 700px) {
+  .nav-doodle { padding: 0.6rem 1rem; }
+  .nav-links { display: none; }
+  .nav-doodle .menu-btn { display: block; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: var(--paper); border: 2px solid var(--doodle-color);
+    border-radius: 12px; padding: 1rem 1.5rem; gap: 0.8rem;
+    margin-top: 0.5rem;
+  }
+  .lightbox-content { max-width: 95vw; }
+  .lightbox-nav { width: 36px; height: 50px; font-size: 1.8rem; }
+  .filter-bar { gap: 0.4rem; }
+  .filter-btn { font-size: 0.78rem; padding: 0.35rem 0.8rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- 手绘行星与花瓣层 -->
+<div class="doodle-layer" id="doodleLayer"></div>
+
+<!-- 手绘光标 -->
+<div class="cursor-dot" id="cursor"></div>
+
+<div class="main-wrap">
+
+  <!-- 导航栏 -->
+  <nav class="nav-doodle" id="navbar">
+    <a href="#" class="logo"><span class="star">⭐</span> 郑文婷的作品集</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#" onclick="filterAll()">🏠 全部</a></li>
+      <li><a href="#gallery">🖼️ 作品</a></li>
+      <li><a href="#about">🌸 关于</a></li>
+    </ul>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+  </nav>
+
+  <!-- 英雄区 -->
+  <header class="hero">
+    <div class="doodle-cloud">
+      <h1>
+        欢迎来到<br>
+        我的<span class="hl hl-mint">作品集</span>
+      </h1>
+    </div>
+    <p class="subtitle">每一件作品都是一颗小星星，散落在手绘的画册里 ✨</p>
+    <div class="doodle-divider"></div>
+  </header>
+
+  <!-- 关于我 -->
+  <div id="about" style="text-align:center;padding:2rem 1rem;margin:1rem 0;">
+    <div style="display:inline-block;background:var(--paper);border:2px dashed var(--doodle-thin);border-radius:var(--radius-organic);padding:1.5rem 2.5rem;max-width:550px;position:relative;">
+      <span class="doodle-corner" style="top:-1rem;left:-0.5rem;">✏️</span>
+      <span class="doodle-corner" style="bottom:-1rem;right:-0.5rem;">📎</span>
+      <p style="font-family:var(--font-doodle);font-size:1.15rem;color:var(--ink);margin-bottom:0.5rem;">嗨！我是一个热爱创作的设计师 🌷</p>
+      <p style="font-size:0.9rem;color:var(--text-light);line-height:1.8;">
+        这里收集了我的 <span style="background:var(--mint-light);padding:0.1rem 0.5rem;border-radius:10px;">Blender 3D</span>、
+        <span style="background:var(--sky-light);padding:0.1rem 0.5rem;border-radius:10px;">Figma UI</span>、
+        <span style="background:var(--lavender-light);padding:0.1rem 0.5rem;border-radius:10px;">AE 动效</span>、
+        <span style="background:var(--peach-light);padding:0.1rem 0.5rem;border-radius:10px;">虚幻引擎</span>……<br>
+        一起在创意的花园里漫步吧 🌿
+      </p>
+    </div>
+  </div>
+
+  <!-- 作品区 -->
+  <div id="gallery">
+    <div class="section-header">
+      <span class="section-emoji">🎨</span>
+      <h2>作品集锦</h2>
+      <p class="section-desc">点击任意卡片查看大图 / 播放视频</p>
+    </div>
+
+    <!-- 筛选按钮 -->
+    <div class="filter-bar" id="filterBar"></div>
+
+    <!-- 横向滑动卡片 -->
+    <div class="scroll-gallery" id="scrollGallery">
+      <div class="scroll-gallery-inner" id="scrollGalleryInner"></div>
+    </div>
+    <!-- Masonry 网格 -->
+    <div class="masonry" id="masonry"></div>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="footer-doodles">⭐</div>
+    <p>用热爱浇灌每一个像素 · 来自 <span class="signature">小艺术家</span> 的画册</p>
+    <p style="margin-top:0.3rem;font-size:0.7rem;">Made with 💖 and lots of doodles</p>
+  </footer>
+</div>
+
+<!-- Lightbox -->
+<button class="lightbox-close" id="lbClose" onclick="closeLightbox()">✕</button>
+<button class="lightbox-nav lightbox-prev" id="lbPrev" onclick="navLightbox(-1)">‹</button>
+<button class="lightbox-nav lightbox-next" id="lbNext" onclick="navLightbox(1)">›</button>
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-content" id="lbContent"></div>
+</div>
+
+<script>
+// ===== 数据：F:\作品集 中各文件夹 =====
+const colors = ['peach','mint','sky','lav','coral','yellow','rose'];
+const categories = [
+  {
+    id: 'ae',
+    name: 'AE 动效展示',
+    emoji: '🎬',
+    folder: 'ae-show',
+    desc: 'After Effects 动态设计',
+    color: 'lav',
+    files: ['6e489d6b256ab27580f9f26683ba5ce5.jpg','ae-show-video.mp4']
+  },
+  {
+    id: 'blender',
+    name: 'Blender 设计展示',
+    emoji: '🍰',
+    folder: 'blender-design',
+    desc: '3D 建模与渲染',
+    color: 'peach',
+    files: ['final-cup.jpg','cup-poster.jpg','detail-view.jpg','strawberry-cake.jpg','strawberry-cake-poster.jpg','cake-modeling.jpg']
+  },
+  {
+    id: 'figma',
+    name: 'Figma 交互 UI 设计',
+    emoji: '📱',
+    folder: 'figma-ui-design',
+    desc: 'UI 界面与交互原型',
+    color: 'mint',
+    files: [
+      'Frame 6812.jpg','Group 6838.png',
+      'Slide 16_9 - 1.jpg','Slide 16_9 - 10.jpg','Slide 16_9 - 11.jpg',
+      'Slide 16_9 - 4.jpg','Slide 16_9 - 5.jpg','Slide 16_9 - 7.jpg',
+      'Slide 16_9 - 8.jpg','Slide 16_9 - 9.jpg',
+      'profile-page.jpg','home-page.jpg','yunbei.mp4','yunbei.pdf','yunbei.pptx',
+      'lo-fi.jpg','lo-fi-1.jpg','lo-fi-2.jpg','lo-fi-3.jpg','lo-fi-4.jpg',
+      'category-page.jpg','friends-page.jpg','tool-swap-page.jpg','mentor-page.jpg',
+      'post-publish-page.jpg','start-page.jpg','recommend-page.jpg','tutorial-page.jpg',
+      'login-page.jpg','social-square-page.jpg','team-baking-page.jpg','chat-page.jpg','timer-page.jpg'
+    ]
+  },
+  {
+    id: 'illustrator',
+    name: 'Illustrator 设计展示',
+    emoji: '🖌️',
+    folder: 'illustrator-design',
+    desc: '矢量插画与海报',
+    color: 'coral',
+    files: [
+      'hamster-party.jpg','element-split-15.jpg','element-split-2-16.jpg','element-split-3-17.jpg',
+      'building-copy.jpg','wechat-image-20250625225542.jpg','poster-19.jpg','poster-1.jpg',
+      'poster-3.jpg','poster-2.jpg'
+    ]
+  },
+  {
+    id: 'touchdesigner',
+    name: 'TouchDesigner 设计展示',
+    emoji: '🔮',
+    folder: 'touchdesigner-design',
+    desc: '生成艺术与交互视觉',
+    color: 'sky',
+    files: ['TDMovieOut.0.mov','interactive-poster.mp4','water-wave-poster.jpg']
+  },
+  {
+    id: 'brand',
+    name: '品牌与字体设计',
+    emoji: '✒️',
+    folder: 'brand-font-design',
+    desc: '品牌识别与字体',
+    color: 'yellow',
+    files: ['font-and-brand.jpg','font-standard.jpg','mockup-display.jpg','poster.jpg']
+  },
+  {
+    id: 'unreal',
+    name: '虚幻引擎展示',
+    emoji: '🏯',
+    folder: 'unreal-engine',
+    desc: 'Unreal Engine 场景',
+    color: 'rose',
+    files: [
+      'ScreenShot00000 (1).png','ScreenShot00000 (2).png',
+      'ScreenShot00000 (3).png','ScreenShot00000 (4).png',
+      'ScreenShot00000 (5).png','ScreenShot00000 (6).png',
+      'Shot01.jpg','Shot02.jpg','Shot03.jpg','misty-zen-temple.mp4'
+    ]
+  }
+];
+
+// ===== 工具函数 =====
+function isVideo(fn) {
+  return /\.(mp4|mov|webm|ogg)$/i.test(fn);
+}
+function isImage(fn) {
+  return /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(fn);
+}
+function isPdf(fn) {
+  return /\.pdf$/i.test(fn);
+}
+function isPptx(fn) {
+  return /\.pptx$/i.test(fn);
+}
+function getPath(cat, fn) {
+  return cat.folder + '/' + fn;
+}
+function getDotClass(cat) {
+  return 'dot-' + cat.color;
+}
+
+// ===== 构建所有作品列表 =====
+let allItems = [];
+categories.forEach(cat => {
+  cat.files.forEach(fn => {
+    if (!isImage(fn) && !isVideo(fn) && !isPdf(fn) && !isPptx(fn)) return;
+    allItems.push({ cat, fn });
+  });
+});
+
+// ===== 筛选器 =====
+function buildFilters() {
+  const bar = document.getElementById('filterBar');
+  bar.innerHTML = '<button class="filter-btn active" onclick="filterAll()">🌟 全部<span class="count">(' + allItems.length + ')</span></button>';
+  categories.forEach(cat => {
+    const visualCount = cat.files.filter(f => isImage(f) || isVideo(f) || isPdf(f) || isPptx(f)).length;
+    bar.innerHTML += '<button class="filter-btn" data-cat="' + cat.id + '" onclick="filterBy(\'' + cat.id + '\')">' + cat.emoji + ' ' + cat.name + '<span class="count">(' + visualCount + ')</span></button>';
+  });
+}
+
+function filterAll() {
+  renderMasonry(allItems);
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-btn').classList.add('active');
+  document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
+}
+function filterBy(catId) {
+  const filtered = allItems.filter(item => item.cat.id === catId);
+  renderMasonry(filtered);
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('[data-cat="' + catId + '"]').classList.add('active');
+  document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ===== 渲染 Masonry =====
+// 通用：生成卡片 HTML
+function buildCard(item, idx, items) {
+  const src = getPath(item.cat, item.fn);
+  const card = document.createElement('div');
+  card.className = 'card';
+  let mediaHTML = '';
+  if (isVideo(item.fn)) {
+    mediaHTML = `<div class="card-media"><span class="video-badge">▶ 视频</span><video preload="metadata" muted playsinline><source src="${src}" type="video/mp4"></video></div>`;
+  } else if (isImage(item.fn)) {
+    mediaHTML = `<div class="card-media"><img src="${src}" alt="${item.fn}" loading="lazy"></div>`;
+  } else if (isPdf(item.fn)) {
+    mediaHTML = `<div class="card-media" style="min-height:180px;display:flex;align-items:center;justify-content:center;font-size:3rem;">📄</div>`;
+  } else if (isPptx(item.fn)) {
+    mediaHTML = `<div class="card-media" style="min-height:180px;display:flex;align-items:center;justify-content:center;font-size:3rem;">📊</div>`;
+  }
+  card.innerHTML = mediaHTML + `<div class="card-body"><h3>${item.fn.replace(/\.[^.]+$/, '')}</h3><div class="card-cat"><span class="dot ${getDotClass(item.cat)}"></span>${item.cat.emoji} ${item.cat.name}</div></div>`;
+  card.addEventListener('click', () => openLightbox(items, idx));
+  return card;
+}
+
+// 横向滚动画廊
+function renderGallery(items) {
+  const inner = document.getElementById('scrollGalleryInner');
+  inner.innerHTML = '';
+  items.forEach((item, idx) => {
+    inner.appendChild(buildCard(item, idx, items));
+  });
+  // 滚动到起始位置
+  document.getElementById('scrollGallery').scrollLeft = 0;
+}
+
+// Masonry（保留备用）
+function renderMasonry(items) {
+  const masonry = document.getElementById('masonry');
+  masonry.innerHTML = '';
+  items.forEach((item, idx) => {
+    masonry.appendChild(buildCard(item, idx, items));
+  });
+}
+
+// ===== Lightbox =====
+let lbItems = [];
+let lbIndex = 0;
+
+function openLightbox(items, idx) {
+  lbItems = items;
+  lbIndex = idx;
+  showLbItem();
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+  // 暂停视频
+  const lbContent = document.getElementById('lbContent');
+  const vid = lbContent.querySelector('video');
+  if (vid) vid.pause();
+}
+function navLightbox(dir) {
+  lbIndex = (lbIndex + dir + lbItems.length) % lbItems.length;
+  showLbItem();
+}
+function showLbItem() {
+  const item = lbItems[lbIndex];
+  const src = getPath(item.cat, item.fn);
+  const lbContent = document.getElementById('lbContent');
+  const isVid = isVideo(item.fn);
+
+  if (isVid) {
+    lbContent.innerHTML = `
+      <video src="${src}" controls autoplay style="display:block;max-width:88vw;max-height:80vh;outline:none;"></video>
+      <div class="lightbox-caption">${item.cat.emoji} ${item.fn} · ${item.cat.name}</div>`;
+  } else if (isPdf(item.fn) || isPptx(item.fn)) {
+    lbContent.innerHTML = `
+      <div style="padding:3rem;text-align:center;">
+        <div style="font-size:5rem;margin-bottom:1rem;">${isPdf(item.fn) ? '📄' : '📊'}</div>
+        <p style="font-family:var(--font-doodle);font-size:1.3rem;">${item.fn}</p>
+        <p style="color:var(--text-light);margin-top:0.5rem;">此文件类型无法在浏览器中预览，请在原文件夹中打开</p>
+        <a href="${src}" download style="display:inline-block;margin-top:1rem;padding:0.6rem 1.5rem;background:var(--peach);color:#fff;border-radius:20px;text-decoration:none;font-family:var(--font-doodle);">📥 下载文件</a>
+      </div>`;
+  } else {
+    lbContent.innerHTML = `
+      <img src="${src}" alt="${item.fn}">
+      <div class="lightbox-caption">${item.cat.emoji} ${item.fn} · ${item.cat.name}</div>`;
+  }
+}
+
+// ===== 键盘和点击事件 =====
+document.addEventListener('keydown', e => {
+  if (document.getElementById('lightbox').classList.contains('active')) {
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') navLightbox(-1);
+    if (e.key === 'ArrowRight') navLightbox(1);
+  }
+});
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if (e.target === this) closeLightbox();
+});
+
+// ===== 手机菜单 =====
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+
+// ===== 自定义光标 =====
+const cursorEl = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursorEl.style.left = (e.clientX - 6) + 'px';
+  cursorEl.style.top = (e.clientY - 6) + 'px';
+});
+document.querySelectorAll('a, button, .card, .filter-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => cursorEl.style.transform = 'rotate(-45deg) scale(1.5)');
+  el.addEventListener('mouseleave', () => cursorEl.style.transform = 'rotate(-45deg) scale(1)');
+});
+
+// ===== 初始化 =====
+buildFilters();
+renderMasonry(allItems);
+
+// ===== CSS 行星与花瓣动态生成 =====
+(function() {
+  var layer = document.getElementById('doodleLayer');
+  if (!layer) return;
+
+  var planetTypes = ['planet-peach', 'planet-lav', 'planet-mint', 'planet-sky', 'planet-yellow', 'planet-rose'];
+  var petalEmojis = ['🌸','🌷','🌼','✿','🌺','💮','🏵️','🌾','🍃','🌿'];
+
+  // Generate planets
+  for (var i = 0; i < 20; i++) {
+    var planet = document.createElement('div');
+    var size = 28 + Math.random() * 40;
+    var type = planetTypes[Math.floor(Math.random() * planetTypes.length)];
+    var x = Math.random() * 100;
+    var y = 5 + Math.random() * 90;
+    var dur = 25 + Math.random() * 40;
+    var delay = Math.random() * -30;
+
+    planet.className = 'doodle-planet ' + type;
+    planet.style.cssText =
+      'width:' + size + 'px; height:' + size + 'px;' +
+      'left:' + x + '%; top:' + y + '%;' +
+      '--drift-dur:' + dur + 's;' +
+      'animation-delay:' + delay + 's;' +
+      '--ring-color:' + (Math.random() > 0.3 ? 'rgba(180,160,140,0.5)' : 'transparent') + ';' +
+      '--crater-color:' + (Math.random() > 0.4 ? 'rgba(140,110,90,0.25)' : 'transparent') + ';' +
+      '--r:' + size + 'px;';
+    layer.appendChild(planet);
+  }
+
+  // Generate petals
+  for (var j = 0; j < 40; j++) {
+    var petal = document.createElement('span');
+    var emoji = petalEmojis[Math.floor(Math.random() * petalEmojis.length)];
+    var size = 12 + Math.random() * 16;
+    var x = Math.random() * 98;
+    var y = Math.random() * 95;
+    var dur = 15 + Math.random() * 35;
+    var delay = Math.random() * -30;
+
+    petal.className = 'doodle-petal';
+    petal.textContent = emoji;
+    petal.style.cssText =
+      'left:' + x + '%; top:' + y + '%;' +
+      '--size:' + size + 'px;' +
+      'font-size:' + size + 'px;' +
+      '--drift-dur:' + dur + 's;' +
+      'animation-delay:' + delay + 's;';
+    layer.appendChild(petal);
+  }
+})();
+</script>
+</body>
+</html>
