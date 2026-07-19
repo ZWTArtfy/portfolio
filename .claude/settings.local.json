@@ -7,7 +7,22 @@
       "Bash(npx vite *)",
       "Bash(git config *)",
       "Bash(git add *)",
-      "Bash(git commit -m 'feat: React 18 + Vite + Tailwind CSS portfolio migration *)"
+      "Bash(git commit -m 'feat: React 18 + Vite + Tailwind CSS portfolio migration *)",
+      "Bash(awk '{print $4}')",
+      "Bash(findstr \"LISTEN\")",
+      "Bash(findstr \"127.0.0.1\")",
+      "Bash(curl -I --connect-timeout 3 http://127.0.0.1:7890)",
+      "Bash(curl -I --connect-timeout 2 http://127.0.0.1:7891)",
+      "Bash(curl -I --connect-timeout 2 http://127.0.0.1:10809)",
+      "Bash(curl -I --connect-timeout 2 http://127.0.0.1:10808)",
+      "Bash(curl -I --connect-timeout 2 http://127.0.0.1:4780)",
+      "Bash(curl -I --connect-timeout 2 http://127.0.0.1:9090)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\" --connect-timeout 5 -x http://127.0.0.1:7890 https://github.com)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\" --connect-timeout 5 -x http://127.0.0.1:10809 https://github.com)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\" --connect-timeout 5 -x http://127.0.0.1:4780 https://github.com)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\" --connect-timeout 5 -x http://127.0.0.1:7897 https://github.com)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\" --connect-timeout 5 -x http://127.0.0.1:33211 https://github.com)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" --connect-timeout 5 https://github.com)"
     ]
   }
 }

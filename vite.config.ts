@@ -17,7 +17,7 @@ export default defineConfig({
       ],
     }),
   ],
-  base: '/',
+  base: '/portfolio/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
