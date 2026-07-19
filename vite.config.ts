@@ -2,7 +2,9 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 
-export default defineConfig({
+// GitHub Pages needs /portfolio/, Vercel needs /
+// Set VITE_BASE env var to override, e.g. VITE_BASE=/ npm run build
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     viteStaticCopy({
@@ -17,9 +19,9 @@ export default defineConfig({
       ],
     }),
   ],
-  base: '/portfolio/',
+  base: process.env.VITE_BASE || '/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
   },
-})
+}))

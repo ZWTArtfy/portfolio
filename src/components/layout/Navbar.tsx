@@ -28,7 +28,7 @@ export default function Navbar({ onFilterReset }: NavbarProps) {
         href="#"
         className="text-[1.8rem] text-ink no-underline flex items-center gap-1.5"
       >
-        <span className="text-[1.5rem] animate-wiggle">⭐</span> 郑文婷的作品集
+        <span className="text-[1.5rem] animate-wiggle">⭐</span> ZWTArtfy · 设计画册
       </a>
 
       {/* Desktop nav links */}

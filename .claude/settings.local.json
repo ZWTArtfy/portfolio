@@ -22,7 +22,14 @@
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\" --connect-timeout 5 -x http://127.0.0.1:4780 https://github.com)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\" --connect-timeout 5 -x http://127.0.0.1:7897 https://github.com)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\" --connect-timeout 5 -x http://127.0.0.1:33211 https://github.com)",
-      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" --connect-timeout 5 https://github.com)"
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" --connect-timeout 5 https://github.com)",
+      "Bash(git push *)",
+      "Bash(ssh-keyscan gitee.com)",
+      "Bash(git remote *)",
+      "Bash(cat \"$HOME/.ssh/id_ed25519.pub\")",
+      "Bash(ssh -T git@gitee.com)",
+      "Bash(ping -n 1 gitee.com)",
+      "WebSearch"
     ]
   }
 }
